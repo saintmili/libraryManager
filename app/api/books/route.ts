@@ -14,8 +14,8 @@ export async function POST(request: Request) {
         data: {
             title: body.title,
             author: body.author,
-            shelfAddressId: body.shelfAddressId,
-            count: body.count
+            shelfAddressId: Number(body.shelfAddressId),
+            count: Number(body.count)
         }
     })
     return NextResponse.json(createdBook)
