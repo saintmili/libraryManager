@@ -9,6 +9,14 @@ export async function GET(request: Request, {params}: {params: {id: string}}) {
             {
                 where: {
                     id: Number(id)
+                },
+                include: {
+                    address: {
+                        include: {
+                            shelf: true
+                        }
+                    },
+                    LoanedBook: true
                 }
             }
         )

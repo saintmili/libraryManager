@@ -2,7 +2,12 @@ import { prisma } from "@/prisma/client";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    const loanedBooks = await prisma.loanedBook.findMany();
+    const loanedBooks = await prisma.loanedBook.findMany({
+        include: {
+            book: true,
+            member: true
+        }
+    });
     return NextResponse.json(loanedBooks)
 }
 
