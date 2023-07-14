@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ExtraTableActions } from "./extraTableActions";
 
 interface TableProps {
-    columns: string[];
+    columns?: string[];
     rows: { id: number; returnedAt: Date | null }[];
     handleEdit?(id: number): void;
     handleDelete?(id: number): void;
@@ -30,24 +30,28 @@ const Link_PARAMS = {
     shelf: {
         href: "shelves",
         id: "shelfId"
+    },
+    shelfAddress: {
+        href: "addresses",
+        id: "shelfAddressId"
     }
 }
 
 const EXCLUDE_PARAMS = [
     "bookId",
     "memberId",
-    "shelfId"
+    "shelfId",
+    "shelfAddressId"
 ];
 
 export function Table(props: TableProps) {
     const { columns, rows, handleEdit, handleDelete, handleReturn, handleView } = props;
-
     return (
         <table className="table-auto">
             <thead>
                 <tr>
-                    {columns.map(col => !EXCLUDE_PARAMS.includes(col) ? <th key={col} className="px-4 py-2">{col}</th> : null)}
-                    <th className="px-4 py-2">Actions</th>
+                    {columns?.map(col => !EXCLUDE_PARAMS.includes(col) ? <th key={col} className="px-4 py-2">{col}</th> : null)}
+                    {columns ? <th className="px-4 py-2">Actions</th> : null}
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +62,7 @@ export function Table(props: TableProps) {
                                 if (EXCLUDE_PARAMS.includes(columns[index])) return;
                                 const content = value && DATE_PARAMS.includes(columns[index]) ? new Date(value).toDateString() : value
                                 return (
-                                    <td key={index + row.id} className="border px-4 py-2">{Link_PARAMS[columns[index]] ? <Link href={Link_PARAMS[columns[index]].href + "/" + row[Link_PARAMS[columns[index]].id].toString()} >{content}</Link> : content}</td>
+                                    <td key={index + row.id} className="border px-4 py-2">{Link_PARAMS[columns[index]] && value ? <Link href={Link_PARAMS[columns[index]].href + "/" + row[Link_PARAMS[columns[index]].id].toString()} >{content}</Link> : content}</td>
                                 )
                             })}
                             <td className="border px-4 py-2 flex flex-center gap-3">

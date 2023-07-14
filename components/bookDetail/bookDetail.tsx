@@ -1,6 +1,5 @@
 'use client'
 
-import { Book, LoanedBook } from "@prisma/client";
 
 interface Props {
     book: Book;

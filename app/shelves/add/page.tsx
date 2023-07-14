@@ -1,4 +1,4 @@
-import { ShelfForm } from "@/components/shelfForm/shelfForm";
+import { ShelfForm } from "../../../components/shelfForm/shelfForm";
 
 export default async function Page() {
     return (

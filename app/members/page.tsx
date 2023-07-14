@@ -1,6 +1,5 @@
-import { MembersTable } from "@/components/membersTable/membersTable";
-import { Member } from "@prisma/client";
 import Link from "next/link";
+import { MembersTable } from "../../components/membersTable/membersTable";
 
 export default async function Members() {
     const data = await fetch("http://localhost:3002/api/members", { cache: "no-store" })

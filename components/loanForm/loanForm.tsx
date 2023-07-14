@@ -16,7 +16,7 @@ interface Props {
 
 export function LoanForm(props: Props) {
     const { books, members } = props;
-    const [data, setData] = useState<Data>({ bookId: books[0].id.toString(), memberId: members[0].id.toString() })
+    const [data, setData] = useState<Data>({ bookId: books[0]?.id.toString() ?? null, memberId: members[0]?.id.toString() ?? null})
     const router = useRouter();
 
     async function handleCreate() {
@@ -34,7 +34,6 @@ export function LoanForm(props: Props) {
             alert("form is not valid")
         }
     }
-    console.log(data)
 
     return (
         <form className="w-full max-w-lg justify-center flex flex-col gap-3" >

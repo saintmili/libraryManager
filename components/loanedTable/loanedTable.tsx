@@ -35,7 +35,7 @@ export function LoanedTable(props: LoanedTableProps) {
                     </span>
                 </label>
             </div>
-            <Table columns={Object.keys(loanedBooks[0])} rows={showAll ? loanedBooks : loanedBooks.filter(book => !book.returnedAt)} handleReturn={handleReturn} />
+            <Table columns={loanedBooks[0] ? Object.keys(loanedBooks[0]) : null} rows={showAll ? loanedBooks : loanedBooks.filter(book => !book.returnedAt)} handleReturn={handleReturn} />
         </>
     )
 }

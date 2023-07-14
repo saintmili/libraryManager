@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "../button/button";
 import { useRouter } from "next/navigation";
-import { Book, Shelf } from "@prisma/client";
+import { Book, Shelf, ShelfAddress } from "@prisma/client";
 
 interface Data {
     shelfId: string | null;
@@ -14,11 +14,12 @@ interface Data {
 interface Props {
     shelves: Shelf[];
     books: Book[];
+    address: ShelfAddress;
 }
 
-export function AddressForm(props: Props) {
-    const { shelves, books } = props;
-    const [data, setData] = useState<Data>({ shelfId: null, bookId: null, row: null, column: null })
+export function AddressEdit(props: Props) {
+    const { shelves, books, address } = props;
+    const [data, setData] = useState<Data>({ shelfId: address.shelfId.toString(), bookId: address.bookId?.toString() ?? null, row: address.row.toString(), column: address.column.toString() })
     const router = useRouter();
 
     async function handleCreate() {
@@ -26,9 +27,9 @@ export function AddressForm(props: Props) {
         Object.entries(data).map(([key, value]) => { if (!value && key !== "bookId") isFormValid = false; })
         if (isFormValid) {
             // form is valid, create data
-            const res = await fetch("http://localhost:3002/api/addresses", {
+            const res = await fetch("http://localhost:3002/api/addresses/" + address.id, {
                 body: JSON.stringify(data),
-                method: "post"
+                method: "put"
             }).then(data => data.json())
             router.push("/addresses");
             console.log(res)
@@ -46,7 +47,7 @@ export function AddressForm(props: Props) {
                         Shelf
                     </label>
                     <div className="relative">
-                        <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-shelf" onChange={(e) => setData({ ...data, shelfId: e.currentTarget.selectedIndex !== 0 ? shelves[e.currentTarget.selectedIndex - 1].id.toString() : null })}>
+                        <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-shelf" value={shelves[Number(data.shelfId)].title} onChange={(e) => setData({ ...data, shelfId: e.currentTarget.selectedIndex !== 0 ? shelves[e.currentTarget.selectedIndex - 1].id.toString() : null })}>
                             <option>None</option>
                             {shelves.map((shelf) => <option key={shelf.id}>{shelf.title}</option>)}
                         </select>
@@ -62,7 +63,7 @@ export function AddressForm(props: Props) {
                         Book
                     </label>
                     <div className="relative">
-                        <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-book" onChange={(e) => setData({ ...data, bookId: e.currentTarget.selectedIndex !== 0 ? books[e.currentTarget.selectedIndex - 1].id.toString() : null })}>
+                        <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-book" value={books[Number(data.bookId)].title} onChange={(e) => setData({ ...data, bookId: e.currentTarget.selectedIndex !== 0 ? books[e.currentTarget.selectedIndex - 1].id.toString() : null })}>
                             <option>None</option>
                             {books.map((book) => <option key={book.id}>{book.title}</option>)}
                         </select>
@@ -77,13 +78,13 @@ export function AddressForm(props: Props) {
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-row">
                         Row
                     </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-row" type="text" onChange={(e) => setData({...data, row: e.currentTarget.value})} />
+                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-row" type="text" value={Number(data.row)} onChange={(e) => setData({...data, row: e.currentTarget.value})} />
                 </div>
                 <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-column">
                         Column
                     </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-column" type="text" onChange={(e) => setData({...data, column: e.currentTarget.value})} />
+                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-column" type="text" value={Number(data.column)} onChange={(e) => setData({...data, column: e.currentTarget.value})} />
                 </div>
             </div>
             <Button onClick={handleCreate}>Create</Button>

@@ -27,7 +27,7 @@ export function ShelvesTable(props: ShelvesTableProps) {
     }
 
     return (
-        <Table columns={Object.keys(shelves[0])} rows={shelves} handleEdit={handleEdit} handleDelete={handleDelete} handleView={handleView} />
+        <Table columns={shelves[0] ? Object.keys(shelves[0]) : null} rows={shelves} handleEdit={handleEdit} handleDelete={handleDelete} handleView={handleView} />
     )
 }
 

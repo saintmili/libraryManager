@@ -10,8 +10,15 @@ interface AddressesTableProps {
 }
 
 export function AddressesTable(props: AddressesTableProps) {
-    const { addresses } = props;
     const router = useRouter();
+
+    const addresses = props.addresses.map(address => {
+        const { Book, shelf, ...newAddress } = address;
+        newAddress.book = address.Book?.title ?? null;
+        newAddress.shelf = address.shelf.title;
+        newAddress.bookId = address.Book?.id;
+        return newAddress;
+    });
 
     async function handleView(id: number) {
         router.push("/addresses/" + id);
@@ -27,7 +34,7 @@ export function AddressesTable(props: AddressesTableProps) {
     }
 
     return (
-        <Table columns={Object.keys(addresses[0])} rows={addresses} handleEdit={handleEdit} handleDelete={handleDelete} handleView={handleView} />
+        <Table columns={addresses[0] ? Object.keys(addresses[0]) : null} rows={addresses} handleEdit={handleEdit} handleDelete={handleDelete} handleView={handleView} />
     )
 }
 

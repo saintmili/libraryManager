@@ -9,8 +9,13 @@ interface BooksTableProps {
 }
 
 export function BooksTable(props: BooksTableProps) {
-    const { books } = props;
     const router = useRouter();
+
+    const books = props.books.map(book => {
+        const { address, ...newAddress } = book;
+        newAddress.shelfAddress = book.address ? "Shelf: " + book.address.shelf.title + ", Row: " + book.address.row + ", Column: " + book.address.column : null;
+        return newAddress;
+    });
 
     async function handleDelete(id: number) {
         await fetch(`http://localhost:3002/api/books/${id}`, { method: "DELETE" }).then(res => res.json())
@@ -26,6 +31,6 @@ export function BooksTable(props: BooksTableProps) {
     }
 
     return (
-        <Table columns={Object.keys(books[0])} rows={books} handleDelete={handleDelete} handleEdit={handleEdit} handleView={handleView} />
+        <Table columns={books[0] ? Object.keys(books[0]) : null} rows={books} handleDelete={handleDelete} handleEdit={handleEdit} handleView={handleView} />
     )
 }

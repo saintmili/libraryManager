@@ -1,6 +1,5 @@
-import { ShelvesTable } from "@/components/shelvesTable/shelvesTable";
-import { Shelf } from "@prisma/client";
 import Link from "next/link";
+import { ShelvesTable } from "../../components/shelvesTable/shelvesTable";
 
 export default async function Page() {
     const data = await fetch("http://localhost:3002/api/shelves", { cache: "no-store" })

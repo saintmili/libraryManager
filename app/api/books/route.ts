@@ -1,8 +1,16 @@
-import { prisma } from "@/prisma/client";
 import { NextResponse } from "next/server";
+import { prisma } from "../../../prisma/client";
 
 export async function GET() {
-    const books = await prisma.book.findMany();
+    const books = await prisma.book.findMany({
+        include: {
+            address: {
+                include: {
+                    shelf: true
+                }
+            }
+        }
+    });
     return NextResponse.json(books)
 }
 
@@ -14,8 +22,10 @@ export async function POST(request: Request) {
         data: {
             title: body.title,
             author: body.author,
-            shelfAddressId: Number(body.shelfAddressId),
-            count: Number(body.count)
+            shelfAddressId: body.shelfAddressId ? Number(body.shelfAddressId) : undefined,
+            count: Number(body.count),
+            publisher: body.publisher,
+            volumeNumber: Number(body.volumeNumber),
         }
     })
     return NextResponse.json(createdBook)

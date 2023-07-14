@@ -1,6 +1,6 @@
-import { BooksTable } from "@/components/booksTable/booksTable";
-import { Book } from "@prisma/client";
 import Link from "next/link";
+import { BooksTable } from "../../components/booksTable/booksTable";
+import { Book } from "@prisma/client";
 
 export default async function Page() {
     const data = await fetch("http://localhost:3002/api/books", { cache: "no-store" })

@@ -1,5 +1,5 @@
-import { AddressForm } from "@/components/addressForm/addressForm";
-import { Book, Shelf } from "@prisma/client";
+import { AddressForm } from "../../../components/addressForm/addressForm";
+import { Book, Shelf } from "../../../prisma/client";
 
 export default async function Page() {
     const shelves: Shelf[] = await fetch("http://localhost:3002/api/shelves", { cache: "no-store" }).then(res => res.json())

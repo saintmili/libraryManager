@@ -1,4 +1,5 @@
-import { MemberDetail } from "../../../components/memberDetail/memberDetail";
+import { MemberEdit } from "@/components/memberEdit/memberEdit";
+import { Member } from "@prisma/client";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const { id } = params;
@@ -8,6 +9,6 @@ export default async function Page({ params }: { params: { id: string } }) {
     if(!id) return null;
 
     return (
-        <MemberDetail member={member} />
+        <MemberEdit member={member} />
     )
 }

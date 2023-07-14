@@ -14,9 +14,11 @@ model Book {
     id             Int            @id @default(autoincrement())
     title          String
     author         String
+    publisher      String
+    volumeNumber   Int
     categories     BookCategory[]
-    shelfAddressId Int            @unique
-    address        ShelfAddress   @relation(fields: [shelfAddressId], references: [id])
+    shelfAddressId Int?            @unique
+    address        ShelfAddress?   @relation(fields: [shelfAddressId], references: [id])
     LoanedBook     LoanedBook[]
     count          Int
 }
@@ -45,8 +47,8 @@ model ShelfAddress {
     id      Int   @id @default(autoincrement())
     row     Int
     column  Int
-    bookId  Int
     shelfId Int
+    bookId  Int?
     shelf   Shelf @relation(fields: [shelfId], references: [id])
     Book    Book?
 }

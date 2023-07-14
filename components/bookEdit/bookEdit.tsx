@@ -1,12 +1,14 @@
+"use client"
+
 import { useState } from "react";
 import { Button } from "../button/button";
-import { ShelfAddress } from "@prisma/client";
+import { Book, ShelfAddress } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 interface Data {
     title: string | null;
     author: string | null;
-    shelfAddressId: string | null;
+    shelfAddressId?: string | null;
     count: string | null;
     publisher: string | null;
     volumeNumber: string | null;
@@ -14,21 +16,22 @@ interface Data {
 
 interface Props {
     addresses: ShelfAddress[];
+    book: Book
 }
 
-export function BookForm(props: Props) {
-    const { addresses } = props;
-    const [data, setData] = useState<Data>({ title: null, author: null, shelfAddressId: null, count: null, publisher: null, volumeNumber: null })
+export function BookEdit(props: Props) {
+    const { addresses, book } = props;
+    const [data, setData] = useState<Data>({ title: book.title, author: book.author, shelfAddressId: book.shelfAddressId?.toString(), count: book.count.toString(), publisher: book.publisher, volumeNumber: book.volumeNumber.toString()})
     const router = useRouter();
 
-    async function handleCreate() {
+    async function handleEdit() {
         let isFormValid = true
         Object.entries(data).map(([key, value]) => { if (!value && key !== "shelfAddressId") isFormValid = false; })
         if (isFormValid) {
             // form is valid, create data
-            await fetch("http://localhost:3002/api/books", {
+            await fetch("http://localhost:3002/api/books/" + book.id, {
                 body: JSON.stringify(data),
-                method: "post"
+                method: "put"
             }).then(data => data.json())
             router.push("/books");
         } else {
@@ -43,7 +46,7 @@ export function BookForm(props: Props) {
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-title">
                         Title
                     </label>
-                        <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-title" type="text" placeholder="title" onChange={(e) => setData({...data, title: e.currentTarget.value})} />
+                        <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-title" type="text" placeholder="title" value={data.title?.toString()} onChange={(e) => setData({...data, title: e.currentTarget.value})} />
                 </div>
             </div>
             <div className="flex flex-wrap">
@@ -51,7 +54,7 @@ export function BookForm(props: Props) {
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-author">
                         Author
                     </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-author" type="text" placeholder="author" onChange={(e) => setData({...data, author: e.currentTarget.value})} />
+                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-author" type="text" placeholder="author" value={data.author?.toString()} onChange={(e) => setData({...data, author: e.currentTarget.value})} />
                 </div>
             </div>
             <div className="flex flex-wrap">
@@ -59,7 +62,7 @@ export function BookForm(props: Props) {
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-publisher">
                         Publisher
                     </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-publisher" type="text" placeholder="publisher" onChange={(e) => setData({...data, publisher: e.currentTarget.value})} />
+                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-publisher" type="text" placeholder="publisher" value={data.publisher?.toString()} onChange={(e) => setData({...data, publisher: e.currentTarget.value})} />
                 </div>
             </div>
             <div className="flex flex-wrap">
@@ -68,7 +71,7 @@ export function BookForm(props: Props) {
                         Address
                     </label>
                     <div className="relative">
-                        <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" onChange={(e) => setData({ ...data, shelfAddressId: e.currentTarget.selectedIndex !== 0 ? addresses[e.currentTarget.selectedIndex - 1].id.toString() : null })}>
+                        <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-address" value={data.shelfAddressId?.toString()} onChange={(e) => setData({ ...data, shelfAddressId: e.currentTarget.selectedIndex !== 0 ? addresses[e.currentTarget.selectedIndex - 1].id.toString() : null })}>
                             <option>None</option>
                             {addresses.map((address) => <option key={address.id}>{address.id}</option>)}
                         </select>
@@ -83,7 +86,7 @@ export function BookForm(props: Props) {
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-count">
                         Count
                     </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-count" type="number" placeholder="999" onChange={(e) => setData({...data, count: e.currentTarget.value})} />
+                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-count" type="number" placeholder="999" value={Number(data.count)} onChange={(e) => setData({...data, count: e.currentTarget.value})} />
                 </div>
             </div>
             <div className="flex flex-wrap">
@@ -91,10 +94,10 @@ export function BookForm(props: Props) {
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-volumeNumber">
                         Volume Number
                     </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-volumeNumber" type="number" placeholder="999" onChange={(e) => setData({...data, volumeNumber: e.currentTarget.value})} />
+                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-volumeNumber" type="number" placeholder="999" value={Number(data.volumeNumber)} onChange={(e) => setData({...data, volumeNumber: e.currentTarget.value})} />
                 </div>
             </div>
-            <Button onClick={handleCreate}>Create</Button>
+            <Button onClick={handleEdit}>Edit</Button>
         </form>
     )
 }

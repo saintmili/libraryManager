@@ -27,6 +27,6 @@ export function MembersTable(props: MembersTableProps) {
     }
 
     return (
-        <Table columns={Object.keys(members[0])} rows={members} handleEdit={handleEdit} handleDelete={handleDelete} handleView={handleView} />
+        <Table columns={members[0] ? Object.keys(members[0]) : null} rows={members} handleEdit={handleEdit} handleDelete={handleDelete} handleView={handleView} />
     )
 }

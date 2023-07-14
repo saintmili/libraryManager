@@ -1,6 +1,5 @@
-import { LoanForm } from "@/components/loanForm/loanForm"
-import { LoanedTable } from "@/components/loanedTable/loanedTable"
-import { Book, LoanedBook, Member } from "@prisma/client"
+import { LoanForm } from "../../components/loanForm/loanForm"
+import { LoanedTable } from "../../components/loanedTable/loanedTable"
 
 export default async function Page() {
     const loanedBooks: LoanedBook[] = await fetch("http://localhost:3002/api/loaned", { cache: "no-store" }).then(res => res.json())

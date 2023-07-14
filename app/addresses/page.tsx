@@ -1,5 +1,5 @@
-import { AddressesTable } from "@/components/addressesTable/addressesTable";
-import { ShelfAddress } from "@prisma/client";
+import { AddressesTable } from "../../components/addressesTable/addressesTable";
+import { ShelfAddress } from "../../prisma/client";
 import Link from "next/link";
 
 export default async function Page() {

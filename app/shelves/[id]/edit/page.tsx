@@ -1,3 +1,4 @@
+import { ShelfEdit } from "@/components/shelfEdit/shelfEdit";
 import { Shelf } from "@prisma/client";
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -7,11 +8,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     if(!id) return null;
 
     return (
-        <>
-            <h1>shelf</h1>
-            <p>id: {shelf.id}</p>
-            <p>Title: {shelf.title}</p>
-        </>
+        <ShelfEdit shelf={shelf} />
     )
 }
 

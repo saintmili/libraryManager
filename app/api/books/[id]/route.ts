@@ -1,5 +1,5 @@
-import { prisma } from "@/prisma/client";
 import { NextResponse } from "next/server";
+import { prisma } from "../../../../prisma/client";
 
 export async function GET(request: Request, {params}: {params: {id: string}}) {
     const {id} = params;
@@ -34,6 +34,28 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
             }
         })
         return NextResponse.json(deletedBook)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
+    const body = await request.json()
+    try {
+        const updatedBook = await prisma.book.update({
+            where: {
+                id: Number(params.id)
+            },
+            data: {
+                author: body.author,
+                count: Number(body.count),
+                publisher: body.publisher,
+                title: body.title,
+                volumeNumber: Number(body.volumeNumber),
+                shelfAddressId: body.shelfAddressId ? Number(body.shelfAddressId) : undefined
+            }
+        })
+        return NextResponse.json(updatedBook)
     } catch (error) {
         console.log(error)
     }
