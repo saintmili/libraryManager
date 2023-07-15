@@ -22,7 +22,7 @@ export function AddressEdit(props: Props) {
     const [data, setData] = useState<Data>({ shelfId: address.shelfId.toString(), bookId: address.bookId?.toString() ?? null, row: address.row.toString(), column: address.column.toString() })
     const router = useRouter();
 
-    async function handleCreate() {
+    async function handleEdit() {
         let isFormValid = true
         Object.entries(data).map(([key, value]) => { if (!value && key !== "bookId") isFormValid = false; })
         if (isFormValid) {
@@ -87,7 +87,7 @@ export function AddressEdit(props: Props) {
                     <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-column" type="text" value={Number(data.column)} onChange={(e) => setData({...data, column: e.currentTarget.value})} />
                 </div>
             </div>
-            <Button onClick={handleCreate}>Create</Button>
+            <Button onClick={handleEdit}>Edit</Button>
         </form>
     )
 }

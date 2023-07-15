@@ -53,7 +53,7 @@ export function MemberEdit(props: Props) {
                     <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-lastname" type="text" value={data.lastName ?? ""} onChange={(e) => setData({ ...data, lastName: e.currentTarget.value })} />
                 </div>
             </div>
-            <Button onClick={handleEdit}>Create</Button>
+            <Button onClick={handleEdit}>Edit</Button>
         </form>
     )
 }
